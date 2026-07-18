@@ -1,0 +1,112 @@
+:root{
+  --blue:#0a58ca;
+  --blue-dark:#08409b;
+  --navy:#0e1b2c;
+  --orange:#ff7a00;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#1b2430;
+  --muted:#66727e;
+  --border:#e3e8ef;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:var(--bg);color:var(--text)}
+a{cursor:pointer}
+
+/* Header */
+header{background:var(--blue);color:#fff;padding:18px 8%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+header h2{cursor:pointer}
+.accent{color:#ffd8a8}
+nav a{color:#fff;text-decoration:none;margin-left:16px;padding:6px 4px;border-bottom:2px solid transparent;transition:.15s}
+nav a:hover,nav a.active{border-bottom:2px solid var(--orange)}
+.badge{background:var(--orange);color:#fff;border-radius:999px;font-size:11px;padding:1px 7px;margin-left:4px}
+
+/* Views */
+.view{display:none}
+.view.active{display:block}
+
+/* Hero / search */
+.hero{padding:60px 8% 50px;background:linear-gradient(180deg,#0e1b2c,#123);color:#fff;text-align:center}
+.hero h1{font-size:2.2rem;margin-bottom:8px}
+.hero p{opacity:.85}
+.search{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr auto;gap:10px;margin-top:24px;max-width:1000px;margin-left:auto;margin-right:auto;text-align:left}
+.search label{font-size:11px;color:#cfd8e3;display:block;margin-bottom:4px}
+.search input,.search select,.search button{padding:12px;border-radius:8px;border:none;width:100%;font-size:14px}
+.search button{background:var(--orange);color:#fff;font-weight:600;border:none;cursor:pointer;transition:.15s}
+.search button:hover{background:#e56d00}
+.search .field{display:flex;flex-direction:column}
+.search .field.btn-field{justify-content:flex-end}
+
+.results-bar{width:90%;max-width:1200px;margin:24px auto 0;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:14px}
+.results-bar button{background:none;border:1px solid var(--border);padding:8px 12px;border-radius:8px;cursor:pointer;color:var(--text)}
+
+.container{width:90%;max-width:1200px;margin:20px auto 60px}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty h3{color:var(--text);margin-bottom:6px}
+.loading{text-align:center;padding:60px 20px;color:var(--muted)}
+
+.hotel{background:var(--card);margin:30px 0;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.top{display:grid;grid-template-columns:35% 65%}
+.top img{width:100%;height:260px;object-fit:cover;display:block}
+.info{padding:20px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.info h2{display:flex;align-items:center;gap:10px}
+.tag{background:#eef2ff;color:var(--blue);font-size:12px;padding:3px 10px;border-radius:999px;font-weight:600}
+.amenities{color:var(--muted);font-size:14px}
+.rooms{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px}
+.room{border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.room img{width:100%;height:180px;object-fit:cover}
+.c{padding:15px;display:flex;flex-direction:column;gap:4px;flex:1}
+.c .price{color:var(--blue);font-weight:700;font-size:18px}
+.c .price span{color:var(--muted);font-weight:400;font-size:12px}
+.btn{display:inline-block;background:var(--blue);color:#fff;padding:10px 16px;text-decoration:none;border-radius:6px;margin-top:auto;border:none;cursor:pointer;font-size:14px;font-weight:600;transition:.15s}
+.btn:hover{background:var(--blue-dark)}
+.btn.secondary{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+.btn.secondary:hover{background:#eef2ff}
+.btn.danger{background:#fff;color:#c0392b;border:1px solid #c0392b}
+.btn.danger:hover{background:#fdecea}
+.btn:disabled{background:#c7cdd6;cursor:not-allowed}
+
+/* Page headers */
+.page-head{padding:40px 8% 10px}
+.page-head h1{font-size:1.8rem;margin-bottom:6px}
+.page-head p{color:var(--muted)}
+
+/* Bookings */
+.booking-card{background:var(--card);border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:20px;display:grid;grid-template-columns:120px 1fr auto;gap:18px;align-items:center;margin-bottom:16px}
+.booking-card img{width:120px;height:90px;object-fit:cover;border-radius:8px}
+.booking-card h3{margin-bottom:4px}
+.booking-card .meta{color:var(--muted);font-size:14px;line-height:1.5}
+.status{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;margin-top:6px}
+.status.confirmed{background:#e6f7ec;color:#1e8a4c}
+.status.cancelled{background:#fdecea;color:#c0392b}
+
+/* Forms (contact / profile) */
+.form-card{background:var(--card);border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:30px;max-width:560px;margin:0 auto}
+.form-row{margin-bottom:16px}
+.form-row label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit}
+.form-row textarea{resize:vertical;min-height:100px}
+.error-text{color:#c0392b;font-size:12px;margin-top:4px;display:none}
+.success-box{background:#e6f7ec;color:#1e8a4c;padding:14px 18px;border-radius:10px;margin-bottom:20px;display:none;font-size:14px}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(10,20,35,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.overlay.active{display:flex}
+.modal{background:#fff;border-radius:14px;max-width:440px;width:100%;padding:28px;position:relative}
+.modal h2{margin-bottom:6px}
+.modal-subtitle{color:var(--muted);font-size:14px;margin-bottom:14px}
+.modal .close{position:absolute;top:16px;right:18px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)}
+.modal .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.modal .row.total{font-weight:700;border-bottom:none;padding-top:14px;font-size:16px}
+.modal .field{margin:14px 0}
+.modal .field label{display:block;font-size:12px;font-weight:600;margin-bottom:4px}
+.modal .field input{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px}
+
+footer{text-align:center;background:#111827;color:#fff;padding:24px;font-size:14px}
+
+@media(max-width:900px){
+  .search,.top,.rooms{grid-template-columns:1fr}
+  .booking-card{grid-template-columns:1fr;text-align:center}
+  .booking-card img{margin:0 auto}
+  nav a{margin-left:10px;font-size:13px}
+}

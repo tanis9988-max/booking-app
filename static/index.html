@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Tanish.Book — Find Your Perfect Stay</title>
+<style>
+:root{
+  --blue:#0a58ca;
+  --blue-dark:#08409b;
+  --navy:#0e1b2c;
+  --orange:#ff7a00;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#1b2430;
+  --muted:#66727e;
+  --border:#e3e8ef;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:var(--bg);color:var(--text)}
+a{cursor:pointer}
+
+/* Header */
+header{background:var(--blue);color:#fff;padding:18px 8%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+header h2{cursor:pointer}
+nav a{color:#fff;text-decoration:none;margin-left:16px;padding:6px 4px;border-bottom:2px solid transparent;transition:.15s}
+nav a:hover,nav a.active{border-bottom:2px solid var(--orange)}
+.badge{background:var(--orange);color:#fff;border-radius:999px;font-size:11px;padding:1px 7px;margin-left:4px}
+
+/* Views */
+.view{display:none}
+.view.active{display:block}
+
+/* Hero / search */
+.hero{padding:60px 8% 50px;background:linear-gradient(180deg,#0e1b2c,#123);color:#fff;text-align:center}
+.hero h1{font-size:2.2rem;margin-bottom:8px}
+.hero p{opacity:.85}
+.search{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr auto;gap:10px;margin-top:24px;max-width:1000px;margin-left:auto;margin-right:auto;text-align:left}
+.search label{font-size:11px;color:#cfd8e3;display:block;margin-bottom:4px}
+.search input,.search select,.search button{padding:12px;border-radius:8px;border:none;width:100%;font-size:14px}
+.search button{background:var(--orange);color:#fff;font-weight:600;border:none;cursor:pointer;transition:.15s}
+.search button:hover{background:#e56d00}
+.search .field{display:flex;flex-direction:column}
+.search .field.btn-field{justify-content:flex-end}
+
+.results-bar{width:90%;max-width:1200px;margin:24px auto 0;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:14px}
+.results-bar button{background:none;border:1px solid var(--border);padding:8px 12px;border-radius:8px;cursor:pointer;color:var(--text)}
+
+.container{width:90%;max-width:1200px;margin:20px auto 60px}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty h3{color:var(--text);margin-bottom:6px}
+
+.hotel{background:var(--card);margin:30px 0;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.top{display:grid;grid-template-columns:35% 65%}
+.top img{width:100%;height:260px;object-fit:cover;display:block}
+.info{padding:20px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.info h2{display:flex;align-items:center;gap:10px}
+.tag{background:#eef2ff;color:var(--blue);font-size:12px;padding:3px 10px;border-radius:999px;font-weight:600}
+.amenities{color:var(--muted);font-size:14px}
+.rooms{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px}
+.room{border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.room img{width:100%;height:180px;object-fit:cover}
+.c{padding:15px;display:flex;flex-direction:column;gap:4px;flex:1}
+.c .price{color:var(--blue);font-weight:700;font-size:18px}
+.c .price span{color:var(--muted);font-weight:400;font-size:12px}
+.btn{display:inline-block;background:var(--blue);color:#fff;padding:10px 16px;text-decoration:none;border-radius:6px;margin-top:auto;border:none;cursor:pointer;font-size:14px;font-weight:600;transition:.15s}
+.btn:hover{background:var(--blue-dark)}
+.btn.secondary{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+.btn.secondary:hover{background:#eef2ff}
+.btn.danger{background:#fff;color:#c0392b;border:1px solid #c0392b}
+.btn.danger:hover{background:#fdecea}
+.btn:disabled{background:#c7cdd6;cursor:not-allowed}
+
+/* Page headers */
+.page-head{padding:40px 8% 10px}
+.page-head h1{font-size:1.8rem;margin-bottom:6px}
+.page-head p{color:var(--muted)}
+
+/* Bookings */
+.booking-card{background:var(--card);border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:20px;display:grid;grid-template-columns:120px 1fr auto;gap:18px;align-items:center;margin-bottom:16px}
+.booking-card img{width:120px;height:90px;object-fit:cover;border-radius:8px}
+.booking-card h3{margin-bottom:4px}
+.booking-card .meta{color:var(--muted);font-size:14px;line-height:1.5}
+.status{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;margin-top:6px}
+.status.confirmed{background:#e6f7ec;color:#1e8a4c}
+.status.cancelled{background:#fdecea;color:#c0392b}
+
+/* Forms (contact / profile) */
+.form-card{background:var(--card);border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:30px;max-width:560px;margin:0 auto}
+.form-row{margin-bottom:16px}
+.form-row label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit}
+.form-row textarea{resize:vertical;min-height:100px}
+.error-text{color:#c0392b;font-size:12px;margin-top:4px;display:none}
+.success-box{background:#e6f7ec;color:#1e8a4c;padding:14px 18px;border-radius:10px;margin-bottom:20px;display:none;font-size:14px}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(10,20,35,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.overlay.active{display:flex}
+.modal{background:#fff;border-radius:14px;max-width:440px;width:100%;padding:28px;position:relative}
+.modal h2{margin-bottom:6px}
+.modal .close{position:absolute;top:16px;right:18px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)}
+.modal .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.modal .row.total{font-weight:700;border-bottom:none;padding-top:14px;font-size:16px}
+.modal .field{margin:14px 0}
+.modal .field label{display:block;font-size:12px;font-weight:600;margin-bottom:4px}
+.modal .field input{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px}
+
+footer{text-align:center;background:#111827;color:#fff;padding:24px;font-size:14px}
+footer span{color:var(--orange)}
+
+@media(max-width:900px){
+  .search,.top,.rooms{grid-template-columns:1fr}
+  .booking-card{grid-template-columns:1fr;text-align:center}
+  .booking-card img{margin:0 auto}
+  nav a{margin-left:10px;font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h2 onclick="goTo('home')">Tanish<span style="color:#ffd8a8">.Book</span></h2>
+  <nav>
+    <a data-view="home" onclick="goTo('home')">Home</a>
+    <a data-view="hotels" onclick="goTo('hotels')">Hotels</a>
+    <a data-view="bookings" onclick="goTo('bookings')">Bookings<span class="badge" id="bookingCount" style="display:none">0</span></a>
+    <a data-view="contact" onclick="goTo('contact')">Contact</a>
+    <a data-view="profile" onclick="goTo('profile')">Profile</a>
+  </nav>
+</header>
+
+<!-- HOME VIEW -->
+<div class="view active" id="view-home">
+  <section class="hero">
+    <h1>Find Your Perfect Stay</h1>
+    <p>Luxury hotels across India</p>
+    <form class="search" id="searchForm">
+      <div class="field">
+        <label>Destination</label>
+        <input id="searchDestination" placeholder="City, e.g. Goa">
+      </div>
+      <div class="field">
+        <label>Check-in</label>
+        <input type="date" id="checkin" required>
+      </div>
+      <div class="field">
+        <label>Check-out</label>
+        <input type="date" id="checkout" required>
+      </div>
+      <div class="field">
+        <label>Guests</label>
+        <select id="guests">
+          <option>1 Guest</option>
+          <option selected>2 Guests</option>
+          <option>3 Guests</option>
+          <option>4 Guests</option>
+        </select>
+      </div>
+      <div class="field btn-field">
+        <button type="submit">Search</button>
+      </div>
+    </form>
+  </section>
+  <div id="home-results"></div>
+</div>
+
+<!-- HOTELS VIEW (same listing, always full list) -->
+<div class="view" id="view-hotels">
+  <div class="page-head">
+    <h1>All Hotels</h1>
+    <p>Browse every property on Tanish.Book</p>
+  </div>
+  <div class="results-bar">
+    <span id="hotelsResultText"></span>
+    <button onclick="clearFilter()">Clear filter</button>
+  </div>
+  <div class="container" id="hotels-results"></div>
+</div>
+
+<!-- BOOKINGS VIEW -->
+<div class="view" id="view-bookings">
+  <div class="page-head">
+    <h1>My Bookings</h1>
+    <p>Bookings made in this session</p>
+  </div>
+  <div class="container" id="bookings-list"></div>
+</div>
+
+<!-- CONTACT VIEW -->
+<div class="view" id="view-contact">
+  <div class="page-head" style="text-align:center">
+    <h1>Contact Us</h1>
+    <p>Questions about a stay? Send us a message.</p>
+  </div>
+  <div class="container">
+    <div class="form-card">
+      <div class="success-box" id="contactSuccess">Message sent — we'll reply within 24 hours.</div>
+      <form id="contactForm" novalidate>
+        <div class="form-row">
+          <label>Full name</label>
+          <input id="cName" type="text">
+          <div class="error-text" id="err-cName">Please enter your name.</div>
+        </div>
+        <div class="form-row">
+          <label>Email</label>
+          <input id="cEmail" type="email">
+          <div class="error-text" id="err-cEmail">Please enter a valid email.</div>
+        </div>
+        <div class="form-row">
+          <label>Message</label>
+          <textarea id="cMessage"></textarea>
+          <div class="error-text" id="err-cMessage">Please enter a message.</div>
+        </div>
+        <button type="submit" class="btn">Send message</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE VIEW -->
+<div class="view" id="view-profile">
+  <div class="page-head" style="text-align:center">
+    <h1>Profile</h1>
+    <p>Your details for faster checkout</p>
+  </div>
+  <div class="container">
+    <div class="form-card">
+      <div class="success-box" id="profileSuccess">Profile saved for this session.</div>
+      <form id="profileForm" novalidate>
+        <div class="form-row">
+          <label>Full name</label>
+          <input id="pName" type="text">
+          <div class="error-text" id="err-pName">Please enter your name.</div>
+        </div>
+        <div class="form-row">
+          <label>Email</label>
+          <input id="pEmail" type="email">
+          <div class="error-text" id="err-pEmail">Please enter a valid email.</div>
+        </div>
+        <div class="form-row">
+          <label>Phone</label>
+          <input id="pPhone" type="tel">
+          <div class="error-text" id="err-pPhone">Please enter a valid 10-digit phone number.</div>
+        </div>
+        <button type="submit" class="btn">Save profile</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 Tanish<span>.Book</span> — Luxury hotels across India</footer>
+
+<!-- BOOKING MODAL -->
+<div class="overlay" id="bookingOverlay">
+  <div class="modal">
+    <button class="close" onclick="closeModal()">✕</button>
+    <h2 id="modalRoomTitle">Room</h2>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:14px" id="modalHotelName">Hotel</p>
+    <div class="field">
+      <label>Guest name</label>
+      <input id="modalGuestName" placeholder="Enter your full name">
+    </div>
+    <div class="field">
+      <label>Nights</label>
+      <input id="modalNights" type="number" min="1" value="1">
+    </div>
+    <div class="row"><span>Rate / night</span><span id="modalRate">₹0</span></div>
+    <div class="row total"><span>Total</span><span id="modalTotal">₹0</span></div>
+    <button class="btn" style="width:100%;margin-top:16px" onclick="confirmBooking()">Confirm booking</button>
+  </div>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const hotels = [
+  {id:1,name:'Hotel 1',city:'Delhi',img:'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80',
+    rooms:[
+      {id:'1-std',type:'Standard Room',price:3400,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80'},
+      {id:'1-dlx',type:'Deluxe Room',price:5000,img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80'}
+    ]},
+  {id:2,name:'Hotel 2',city:'Goa',img:'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80',
+    rooms:[
+      {id:'2-std',type:'Standard Room',price:3800,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80'},
+      {id:'2-dlx',type:'Deluxe Room',price:5500,img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80'}
+    ]},
+  {id:3,name:'Hotel 3',city:'Jaipur',img:'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80',
+    rooms:[
+      {id:'3-std',type:'Standard Room',price:4200,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80'},
+      {id:'3-dlx',type:'Deluxe Room',price:6000,img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80'}
+    ]},
+  {id:4,name:'Hotel 4',city:'Mumbai',img:'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80',
+    rooms:[
+      {id:'4-std',type:'Standard Room',price:4600,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80'},
+      {id:'4-dlx',type:'Deluxe Room',price:6500,img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80'}
+    ]},
+  {id:5,name:'Hotel 5',city:'Shimla',img:'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80',
+    rooms:[
+      {id:'5-std',type:'Standard Room',price:5000,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80'},
+      {id:'5-dlx',type:'Deluxe Room',price:7000,img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80'}
+    ]},
+  {id:6,name:'Hotel 6',city:'Udaipur',img:'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80',
+    rooms:[
+      {id:'6-std',type:'Standard Room',price:5400,img:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80'},
+      {id:'6-dlx',type:'Deluxe Room',price:7500,img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80'}
+    ]}
+];
+
+/* In-memory state (resets on page reload — no backend/storage attached) */
+let bookings = [];
+let profile = null;
+let currentBookingCtx = null; // {hotel, room}
+
+/* ---------------- NAVIGATION ---------------- */
+function goTo(viewName){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+viewName).classList.add('active');
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active', a.dataset.view===viewName));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(viewName==='hotels') renderHotelList('hotels-results', hotels, true);
+  if(viewName==='bookings') renderBookings();
+}
+
+/* ---------------- RENDER HOTEL CARDS ---------------- */
+function hotelCardHTML(hotel){
+  const roomsHTML = hotel.rooms.map(r=>`
+    <div class="room">
+      <img src="${r.img}" alt="${r.type}">
+      <div class="c">
+        <h3>${r.type}</h3>
+        <div class="price">₹${r.price.toLocaleString('en-IN')} <span>/ night</span></div>
+        <button class="btn" onclick='openBookingModal(${hotel.id}, "${r.id}")'>Book Now</button>
+      </div>
+    </div>`).join('');
+  return `
+  <div class="hotel">
+    <div class="top">
+      <img src="${hotel.img}" alt="${hotel.name}">
+      <div class="info">
+        <h2>${hotel.name} <span class="tag">${hotel.city}</span></h2>
+        <p class="amenities">⭐⭐⭐⭐⭐ &nbsp;|&nbsp; WiFi &nbsp;|&nbsp; Pool &nbsp;|&nbsp; Breakfast</p>
+      </div>
+    </div>
+    <div class="rooms">${roomsHTML}</div>
+  </div>`;
+}
+
+function renderHotelList(containerId, list, isHotelsPage){
+  const el = document.getElementById(containerId);
+  if(list.length===0){
+    el.innerHTML = `<div class="empty"><h3>No hotels found</h3><p>Try a different destination.</p></div>`;
+  } else {
+    el.innerHTML = list.map(hotelCardHTML).join('');
+  }
+  if(isHotelsPage){
+    document.getElementById('hotelsResultText').textContent = `${list.length} propert${list.length===1?'y':'ies'} found`;
+  }
+}
+
+/* ---------------- SEARCH ---------------- */
+document.getElementById('searchForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const dest = document.getElementById('searchDestination').value.trim().toLowerCase();
+  const checkin = document.getElementById('checkin').value;
+  const checkout = document.getElementById('checkout').value;
+
+  if(checkin && checkout && checkout <= checkin){
+    alert('Check-out date must be after the check-in date.');
+    return;
+  }
+
+  const filtered = dest ? hotels.filter(h=>h.city.toLowerCase().includes(dest) || h.name.toLowerCase().includes(dest)) : hotels;
+  renderHotelList('home-results', filtered, false);
+  renderHotelList('hotels-results', filtered, true);
+
+  // Jump to hotels view to show full filtered results
+  goToFilteredHotels(filtered, dest);
+});
+
+function goToFilteredHotels(filtered, dest){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-hotels').classList.add('active');
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active', a.dataset.view==='hotels'));
+  renderHotelList('hotels-results', filtered, true);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function clearFilter(){
+  document.getElementById('searchDestination').value='';
+  renderHotelList('hotels-results', hotels, true);
+}
+
+/* ---------------- BOOKING MODAL ---------------- */
+function openBookingModal(hotelId, roomId){
+  const hotel = hotels.find(h=>h.id===hotelId);
+  const room = hotel.rooms.find(r=>r.id===roomId);
+  currentBookingCtx = {hotel, room};
+  document.getElementById('modalRoomTitle').textContent = room.type;
+  document.getElementById('modalHotelName').textContent = `${hotel.name}, ${hotel.city}`;
+  document.getElementById('modalRate').textContent = '₹'+room.price.toLocaleString('en-IN');
+  document.getElementById('modalNights').value = 1;
+  document.getElementById('modalGuestName').value = profile ? profile.name : '';
+  updateModalTotal();
+  document.getElementById('bookingOverlay').classList.add('active');
+}
+function updateModalTotal(){
+  if(!currentBookingCtx) return;
+  let nights = parseInt(document.getElementById('modalNights').value) || 1;
+  if(nights<1) nights=1;
+  document.getElementById('modalTotal').textContent = '₹'+(currentBookingCtx.room.price*nights).toLocaleString('en-IN');
+}
+document.getElementById('modalNights').addEventListener('input', updateModalTotal);
+
+function closeModal(){
+  document.getElementById('bookingOverlay').classList.remove('active');
+  currentBookingCtx = null;
+}
+
+function confirmBooking(){
+  const name = document.getElementById('modalGuestName').value.trim();
+  const nights = parseInt(document.getElementById('modalNights').value) || 1;
+  if(!name){
+    alert('Please enter the guest name.');
+    return;
+  }
+  if(nights<1){
+    alert('Nights must be at least 1.');
+    return;
+  }
+  const {hotel, room} = currentBookingCtx;
+  bookings.push({
+    id: Date.now(),
+    hotel, room, nights, guestName: name,
+    total: room.price*nights,
+    status: 'confirmed'
+  });
+  updateBookingBadge();
+  closeModal();
+  goTo('bookings');
+}
+
+/* ---------------- BOOKINGS LIST ---------------- */
+function renderBookings(){
+  const el = document.getElementById('bookings-list');
+  if(bookings.length===0){
+    el.innerHTML = `<div class="empty"><h3>No bookings yet</h3><p>Book a room from the Hotels page to see it here.</p></div>`;
+    return;
+  }
+  el.innerHTML = bookings.map(b=>`
+    <div class="booking-card">
+      <img src="${b.room.img}" alt="${b.room.type}">
+      <div>
+        <h3>${b.room.type} — ${b.hotel.name}, ${b.hotel.city}</h3>
+        <div class="meta">Guest: ${b.guestName}<br>${b.nights} night(s) &nbsp;•&nbsp; Total: ₹${b.total.toLocaleString('en-IN')}</div>
+        <span class="status ${b.status}">${b.status==='confirmed' ? 'Confirmed' : 'Cancelled'}</span>
+      </div>
+      <div>
+        ${b.status==='confirmed' ? `<button class="btn danger" onclick="cancelBooking(${b.id})">Cancel</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+function cancelBooking(id){
+  const b = bookings.find(x=>x.id===id);
+  if(b && confirm('Cancel this booking?')){
+    b.status='cancelled';
+    renderBookings();
+    updateBookingBadge();
+  }
+}
+function updateBookingBadge(){
+  const active = bookings.filter(b=>b.status==='confirmed').length;
+  const badge = document.getElementById('bookingCount');
+  if(active>0){ badge.style.display='inline-block'; badge.textContent=active; }
+  else { badge.style.display='none'; }
+}
+
+/* ---------------- CONTACT FORM ---------------- */
+document.getElementById('contactForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  let valid = true;
+  const name = document.getElementById('cName').value.trim();
+  const email = document.getElementById('cEmail').value.trim();
+  const msg = document.getElementById('cMessage').value.trim();
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  toggleError('err-cName', !name); if(!name) valid=false;
+  toggleError('err-cEmail', !emailRe.test(email)); if(!emailRe.test(email)) valid=false;
+  toggleError('err-cMessage', !msg); if(!msg) valid=false;
+
+  if(!valid) return;
+
+  document.getElementById('contactSuccess').style.display='block';
+  this.reset();
+  setTimeout(()=>document.getElementById('contactSuccess').style.display='none', 4000);
+});
+
+/* ---------------- PROFILE FORM ---------------- */
+document.getElementById('profileForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  let valid = true;
+  const name = document.getElementById('pName').value.trim();
+  const email = document.getElementById('pEmail').value.trim();
+  const phone = document.getElementById('pPhone').value.trim();
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRe = /^\d{10}$/;
+
+  toggleError('err-pName', !name); if(!name) valid=false;
+  toggleError('err-pEmail', !emailRe.test(email)); if(!emailRe.test(email)) valid=false;
+  toggleError('err-pPhone', !phoneRe.test(phone)); if(!phoneRe.test(phone)) valid=false;
+
+  if(!valid) return;
+
+  profile = {name, email, phone};
+  document.getElementById('profileSuccess').style.display='block';
+  setTimeout(()=>document.getElementById('profileSuccess').style.display='none', 4000);
+});
+
+function toggleError(id, show){
+  document.getElementById(id).style.display = show ? 'block' : 'none';
+}
+
+/* ---------------- INIT ---------------- */
+(function init(){
+  // set sensible default dates
+  const today = new Date();
+  const tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
+  const dayAfter = new Date(today); dayAfter.setDate(today.getDate()+2);
+  document.getElementById('checkin').value = tomorrow.toISOString().split('T')[0];
+  document.getElementById('checkout').value = dayAfter.toISOString().split('T')[0];
+  document.getElementById('checkin').min = today.toISOString().split('T')[0];
+
+  renderHotelList('home-results', hotels, false);
+})();
+</script>
+</body>
+</html>

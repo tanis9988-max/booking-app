@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: tanish-book
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tanish-book-db
+          property: connectionString
+      - key: FLASK_DEBUG
+        value: "0"
+
+databases:
+  - name: tanish-book-db
+    plan: free
